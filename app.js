@@ -30,7 +30,9 @@ app.use(requestId);
 logger.token('tenantId', (req) => req.tenantId);
 logger.token('requestId', (req) => req.requestId);
 
-const rootRouter = require('./routes/root')(assetBasePath);
+const rootRouter = require('./routes/root')(basePath, assetBasePath);
+const featuresRouter = require('./routes/features')(basePath, assetBasePath);
+const overviewRouter = require('./routes/overview')(assetBasePath);
 
 // eslint-disable-next-line max-len
 app.use(logger('[ctx@49610 rid=":requestId" tn=":tenantId"][http@49610 method=":method" url=":url" millis=":response-time" sbytes=":res[content-length]" status=":status"] '));
@@ -40,6 +42,8 @@ app.use(cookieParser());
 app.use(assetBasePath, express.static(path.join(__dirname, 'web')));
 
 app.use(`${basePath}/`, rootRouter);
+app.use(`${basePath}/features`, featuresRouter);
+app.use(`${basePath}/overview`, overviewRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

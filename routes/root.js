@@ -1,6 +1,6 @@
 const express = require('express');
 
-module.exports = (assetBasePath) => {
+module.exports = (basePath, assetBasePath) => {
     const router = express.Router();
 
     router.get('/', (req, res) => {
@@ -9,6 +9,11 @@ module.exports = (assetBasePath) => {
         res.format({
             'application/hal+json': () => {
                 res.send({
+                    _links: {
+                        featuresdescription: {
+                            href: `${basePath}/features`,
+                        },
+                    },
                 });
             },
             'text/html': () => {
