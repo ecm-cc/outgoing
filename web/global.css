@@ -31,6 +31,15 @@ body {
     display: none;
 }
 
+.mdc-button {
+    display: none;
+    margin-top: 16px;
+}
+
+.resume {
+    margin-left: 16px;
+}
+
 .mdc-data-table {
     width: 100%;
 }

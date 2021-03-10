@@ -40,6 +40,8 @@
             {{{body}}}
         </div>
     </div>
+    {{> dialog question="Wollen Sie die Rechnungen wirklich an Crossinx senden?" id="send-confirmation-dialog" abort=true}}
+    {{> dialog dialogtitle="Rechnungsversand abgeschlossen" question="lädt" id="response-dialog"}}
 </body>
 
 </html>

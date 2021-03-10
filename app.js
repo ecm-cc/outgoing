@@ -33,6 +33,7 @@ logger.token('requestId', (req) => req.requestId);
 const rootRouter = require('./routes/root')(basePath, assetBasePath);
 const featuresRouter = require('./routes/features')(basePath, assetBasePath);
 const overviewRouter = require('./routes/overview')(assetBasePath);
+const invoicesRouter = require('./routes/invoices')();
 
 // eslint-disable-next-line max-len
 app.use(logger('[ctx@49610 rid=":requestId" tn=":tenantId"][http@49610 method=":method" url=":url" millis=":response-time" sbytes=":res[content-length]" status=":status"] '));
@@ -44,6 +45,7 @@ app.use(assetBasePath, express.static(path.join(__dirname, 'web')));
 app.use(`${basePath}/`, rootRouter);
 app.use(`${basePath}/features`, featuresRouter);
 app.use(`${basePath}/overview`, overviewRouter);
+app.use(`${basePath}/invoices`, invoicesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
