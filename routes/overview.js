@@ -9,7 +9,7 @@ module.exports = (assetBasePath) => {
         console.log(`TenantId:${req.tenantId}`);
         console.log(`SystemBaseUri:${req.systemBaseUri}`);
         const config = getLocalConfig(req.tenantId);
-        const metaData = await getMetaData(config);
+        const metaData = await getMetaData(config, assetBasePath);
         res.format({
             'text/html': () => {
                 res.render('overview', {
@@ -28,9 +28,10 @@ module.exports = (assetBasePath) => {
     return router;
 };
 
-async function getMetaData(config) {
+async function getMetaData(config, assetBasePath) {
     const searchURL = await getSearchURL(config);
     return {
         searchURL,
+        assetBasePath,
     };
 }

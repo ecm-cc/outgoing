@@ -1,6 +1,14 @@
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
     <h1 class="mdc-typography--headline5 no-margin">Rechnungen an Crossinx versenden</h1>
 </div>
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 invoice-table">
+    {{> input title="Suchen" id="search-field"}}
+</div>
+
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 invoice-table">
+    <div class="mdc-chip-set" role="grid">
+    </div>
+</div>
 
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 invoice-table">
     <div class="mdc-data-table">
@@ -9,7 +17,6 @@
                 <thead>
                     <tr class="mdc-data-table__header-row">
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Auswahl</th>
-                        {{!-- <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Rechnungsnummer</th> --}}
                         {{> tableheader title="Rechnungsnummer"}}
                         {{> tableheader title="Buchungskreis ID"}}
                         {{> tableheader title="Organisationseinheit"}}
@@ -23,23 +30,6 @@
                         {{> tableheader title="Währung"}}
                         {{> tableheader title="Ersteller (SAP)"}}
                         {{> tableheader title="Erstelldatum (SAP)"}}
-                        {{!-- <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Buchungskreis ID</th> --}}
-                        {{!-- <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Organisationseinheit
-                        </th> --}}
-                        {{!-- <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Debitorennummer (AG)
-                        </th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Debitorenname (AG)</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Debitorennummer (WE)
-                        </th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Debitorenname (WE)</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Debitorennummer (RE)
-                        </th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Debitorenname (RE)</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Rechnungsgesamtbetrag,
-                            brutto</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Währung</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Ersteller (SAP)</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Erstelldatum (SAP)</th> --}}
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">01 vorhanden</th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">02 vorhanden</th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">08 vorhanden</th>
@@ -49,10 +39,9 @@
                         </th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">KuSoFa</th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Deb. GS-Verfahren</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Verarbeitungsstatus</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Versandzeitpunkt</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">
-                            Versandrückmeldezeitpunkt</th>
+                        {{> tableheader title="Verarbeitungsstatus"}}
+                        {{> tableheader title="Versandzeitpunkt"}}
+                        {{> tableheader title="Versandrückmeldezeitpunkt"}}
                     </tr>
                 </thead>
                 <tbody class="mdc-data-table__content">
