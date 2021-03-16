@@ -82,13 +82,14 @@ async function checkInvoiceDocuments(invoice) {
     $(`#${invoice.id}-documents-01`).text(has01Text);
     $(`#${invoice.id}-documents-02`).text(has02Text);
     $(`#${invoice.id}-documents-08`).text(has08Text);
+    add010208Value(invoice);
 }
 
 function changeInvoiceState(documentID) {
     if (checkedInvoices.includes(documentID)) {
         delete checkedInvoices[checkedInvoices.indexOf(documentID)];
         checkedInvoices = checkedInvoices.filter((inv) => inv !== null);
-        $(`#list-item-${documentID}`).remove();
+        $(`.mdc-layout-grid__cell--span-3 .mdc-list #list-item-${documentID}`).remove();
     } else {
         checkedInvoices.push(documentID);
         const invoice = invoices.find((inv) => inv.id === documentID);

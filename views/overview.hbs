@@ -1,16 +1,35 @@
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
     <h1 class="mdc-typography--headline5 no-margin">Rechnungen an Crossinx versenden</h1>
 </div>
-<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 invoice-table">
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 ">
     {{> input title="Suchen" id="search-field"}}
 </div>
 
-<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 invoice-table">
-    <div class="mdc-chip-set" role="grid">
-    </div>
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+    {{> dropdown title="Buchungskreis ID" id="companycode"}}
 </div>
 
-<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9 invoice-table">
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+    {{> dropdown title="Organisationseinheit" id="organisationunit"}}
+</div>
+
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+    {{> dropdown title="Verarbeitungsstatus" id="processingstatus"}}
+</div>
+
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+    {{> checkbox title="01 vorhanden" id="documents01"}}
+</div>
+
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+    {{> checkbox title="02 vorhanden" id="documents02"}}
+</div>
+
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+    {{> checkbox title="08 vorhanden" id="documents08"}}
+</div>
+
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-9">
     <div class="mdc-data-table">
         <div class="mdc-data-table__table-container">
             <table class="mdc-data-table__table" aria-label="Rechnungen">
@@ -50,7 +69,7 @@
         </div>
     </div>
 </div>
-<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3 invoice-table">
+<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
     <h1 class="mdc-typography--headline6 resume">Ausgewählte Rechnungen</h1>
     <ul class="mdc-list">
     </ul>

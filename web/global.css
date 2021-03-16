@@ -43,3 +43,11 @@ body {
 .mdc-data-table {
     width: 100%;
 }
+
+.mdc-select {
+    width: 100%;
+}
+
+.mdc-text-field {
+    width: 100%;
+}

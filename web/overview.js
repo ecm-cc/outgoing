@@ -5,6 +5,7 @@
 let metaData;
 let dialog;
 let responseDialog;
+let searchTextfield;
 let invoices = [];
 let displayedInvoices = [];
 let checkedInvoices = [];
@@ -18,6 +19,8 @@ window.onload = async () => {
     invoices = await loadInvoices();
     displayedInvoices = JSON.parse(JSON.stringify(invoices));
     renderInvoices();
+    initCheckboxes();
+    fillDropdowns();
     hideOverlay();
 };
 
@@ -25,9 +28,7 @@ window.onload = async () => {
  * Configures and initializes Material components
  */
 function initMDCElements() {
-    const chipSetEl = document.querySelector('.mdc-chip-set');
-    const chipSet = new mdc.chips.MDCChipSet(chipSetEl);
-    [].map.call(document.querySelectorAll('.mdc-text-field'), (el) => new mdc.textField.MDCTextField(el));
+    searchTextfield = new mdc.textField.MDCTextField(document.querySelector('.mdc-text-field'));
     dialog = new mdc.dialog.MDCDialog(document.querySelector('#send-confirmation-dialog'));
     responseDialog = new mdc.dialog.MDCDialog(document.querySelector('#response-dialog'));
     mdc.linearProgress.MDCLinearProgress.attachTo(document.querySelector('.mdc-linear-progress'));
