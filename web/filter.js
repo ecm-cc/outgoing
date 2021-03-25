@@ -74,8 +74,9 @@ function search() {
             || properties['Debitorenname (AG)'].toLowerCase().includes(searchString)
             || properties['Debitorenname (WE)'].toLowerCase().includes(searchString)
             || properties['Debitorenname (RE)'].toLowerCase().includes(searchString)
-            || properties['Ersteller (SAP)'].toLowerCase().includes(searchString)
-            || properties.Verarbeitungsstatus.toLowerCase().includes(searchString);
+            || properties['Debitorennummer (AG)'].toLowerCase().includes(searchString)
+            || properties['Debitorennummer (WE)'].toLowerCase().includes(searchString)
+            || properties['Debitorennummer (RE)'].toLowerCase().includes(searchString);
         });
         rerenderTable();
     }

@@ -17,7 +17,7 @@ async function getInvoiceCategory(config) {
 
 async function getSearchProperties(config) {
     const processingState = await propertyMapping.getProperty(config.stage, null, 'Verarbeitungsstatus');
-    const processingStateFilter = `"${processingState.propertyKey}":["Offen", "Versandt", "Fehler", "Versandbereit"]`;
+    const processingStateFilter = `"${processingState.propertyKey}":["Offen", "Fehler", "Versandbereit"]`;
     const internalReceipt = await propertyMapping.getProperty(config.stage, null, 'Interner Beleg');
     const internalReceiptFilter = `"${internalReceipt.propertyKey}":[""]`;
     const kuSoFa = await propertyMapping.getProperty(config.stage, null, 'KuSoFa');

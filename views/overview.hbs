@@ -53,11 +53,8 @@
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">02 vorhanden</th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">08 vorhanden</th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">E-Invoice</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Interner Beleg</th>
                         <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Rechnungsanlage Kunde
                         </th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">KuSoFa</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Deb. GS-Verfahren</th>
                         {{> tableheader title="Verarbeitungsstatus"}}
                         {{> tableheader title="Versandzeitpunkt"}}
                         {{> tableheader title="Versandrückmeldezeitpunkt"}}
@@ -70,10 +67,11 @@
     </div>
 </div>
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-    <h1 class="mdc-typography--headline6 resume">Ausgewählte Rechnungen</h1>
-    <ul class="mdc-list">
-    </ul>
-    <button class="mdc-button mdc-button--raised resume" onclick="sendInvoices()">
+    <h1 class="mdc-typography--headline6 cart">
+        Ausgewählte Rechnungen
+        <p class="mdc-typography--subtitle2"><span id="checked-invoices">0</span> von <span id="all-invoices">0</span> Rechnungen zum Versand ausgewählt.</p>
+    </h1>
+    <button class="mdc-button mdc-button--raised cart" onclick="sendInvoices()">
         <span class="mdc-button__label">Rechnungen absenden</span>
     </button>
 </div>

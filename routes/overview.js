@@ -31,6 +31,7 @@ module.exports = (assetBasePath) => {
 async function getMetaData(config, assetBasePath) {
     const searchURL = await getSearchURL(config);
     return {
+        config,
         searchURL,
         assetBasePath,
     };
