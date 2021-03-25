@@ -9,8 +9,8 @@ function renderInvoices() {
         $('.mdc-data-table__content').append(`
             <tr class="mdc-data-table__row" data-row-id="row-${i}" id="table-row-${invoice.id}">
                 <td class="mdc-data-table__cell mdc-data-table__cell--checkbox">
-                    <div class="mdc-checkbox${isEnabled ? '' : 'ddd'}">
-                        <input onclick="changeInvoiceState('${invoice.id}')"
+                <div class="mdc-checkbox mdc-data-table__row-checkbox ${isEnabled ? '' : 'mdc-checkbox--disabled'}">
+                <input onclick="changeInvoiceState('${invoice.id}')"
                          type="checkbox" class="mdc-checkbox__native-control" aria-labelledby="row-${i}" ${isEnabled ? '' : 'disabled'}/>
                     <div class="mdc-checkbox__background">
                         <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
@@ -49,7 +49,8 @@ function renderInvoices() {
             </tr>`);
         promises.push(checkInvoiceDocuments(invoice));
     });
-    // dataTable.layout();
+    dataTable = new mdc.dataTable.MDCDataTable(document.querySelector('.mdc-data-table'));
+    dataTable.layout();
     $('.invoice-table').show();
 }
 

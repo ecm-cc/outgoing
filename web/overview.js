@@ -21,8 +21,6 @@ window.onload = async () => {
     $('#all-invoices').text(invoices.length);
     displayedInvoices = JSON.parse(JSON.stringify(invoices));
     renderInvoices();
-    dataTable = new mdc.dataTable.MDCDataTable(document.querySelector('.mdc-data-table'));
-    dataTable.layout();
     initCheckboxes();
     fillDropdowns();
     hideOverlay();
