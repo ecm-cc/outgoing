@@ -35,7 +35,22 @@
             <table class="mdc-data-table__table" aria-label="Rechnungen">
                 <thead>
                     <tr class="mdc-data-table__header-row">
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Auswahl</th>
+                        {{!-- <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Auswahl</th> --}}
+                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
+                            role="columnheader" scope="col">
+                            <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
+                                <input type="checkbox" class="mdc-checkbox__native-control"
+                                    aria-label="Toggle all rows" />
+                                <div class="mdc-checkbox__background">
+                                    <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                        <path class="mdc-checkbox__checkmark-path" fill="none"
+                                            d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                                    </svg>
+                                    <div class="mdc-checkbox__mixedmark"></div>
+                                </div>
+                                <div class="mdc-checkbox__ripple"></div>
+                            </div>
+                        </th>
                         {{> tableheader title="Rechnungsnummer"}}
                         {{> tableheader title="Buchungskreis ID"}}
                         {{> tableheader title="Organisationseinheit"}}
@@ -69,7 +84,8 @@
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
     <h1 class="mdc-typography--headline6 cart">
         Ausgewählte Rechnungen
-        <p class="mdc-typography--subtitle2"><span id="checked-invoices">0</span> von <span id="all-invoices">0</span> Rechnungen zum Versand ausgewählt.</p>
+        <p class="mdc-typography--subtitle2"><span id="checked-invoices">0</span> von <span id="all-invoices">0</span>
+            Rechnungen zum Versand ausgewählt.</p>
     </h1>
     <button class="mdc-button mdc-button--raised cart" onclick="sendInvoices()">
         <span class="mdc-button__label">Rechnungen absenden</span>

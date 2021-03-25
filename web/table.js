@@ -8,8 +8,8 @@ function renderInvoices() {
         const isEnabled = properties.Verarbeitungsstatus === 'Versandbereit';
         $('.mdc-data-table__content').append(`
             <tr class="mdc-data-table__row" data-row-id="row-${i}" id="table-row-${invoice.id}">
-                <td class="mdc-data-table__cell">
-                    <div class="mdc-checkbox ${isEnabled ? '' : 'mdc-checkbox--disabled'}">
+                <td class="mdc-data-table__cell mdc-data-table__cell--checkbox">
+                    <div class="mdc-checkbox${isEnabled ? '' : 'ddd'}">
                         <input onclick="changeInvoiceState('${invoice.id}')"
                          type="checkbox" class="mdc-checkbox__native-control" aria-labelledby="row-${i}" ${isEnabled ? '' : 'disabled'}/>
                     <div class="mdc-checkbox__background">
@@ -21,7 +21,11 @@ function renderInvoices() {
                     <div class="mdc-checkbox__ripple"></div>
                     </div>
                 </td>
-                <th class="mdc-data-table__cell" id="row-${i}" scope="row">${properties.Rechnungsnummer}</th>
+                <th class="mdc-data-table__cell" id="row-${i}" scope="row">
+                    <a href="/dms/r/${metaData.config.repositoryID}/o2/${invoice.id}" target="dapi_navigate">
+                    ${properties.Rechnungsnummer}
+                    </a>
+                </th>
                 <td class="mdc-data-table__cell">${properties['Buchungskreis ID']}</td>
                 <td class="mdc-data-table__cell">${properties.Organisationseinheit}</td>
                 <td class="mdc-data-table__cell">${properties['Debitorennummer (AG)']}</td>
@@ -38,16 +42,14 @@ function renderInvoices() {
                 <td class="mdc-data-table__cell" id="${invoice.id}-documents-02"></td>
                 <td class="mdc-data-table__cell" id="${invoice.id}-documents-08"></td>
                 <td class="mdc-data-table__cell">${properties['E-Invoice']}</td>
-                <td class="mdc-data-table__cell">${properties['Interner Beleg']}</td>
                 <td class="mdc-data-table__cell">${properties['Rechnungsanlage Kunde']}</td>
-                <td class="mdc-data-table__cell">${properties.KuSoFa}</td>
-                <td class="mdc-data-table__cell">${properties['GS-Verfahren']}</td>
                 <td class="mdc-data-table__cell">${properties.Verarbeitungsstatus}</td>
                 <td class="mdc-data-table__cell">${properties.Versandzeitpunkt}</td>
                 <td class="mdc-data-table__cell">${properties.Versandrückmeldezeitpunkt}</td>
             </tr>`);
         promises.push(checkInvoiceDocuments(invoice));
     });
+    // dataTable.layout();
     $('.invoice-table').show();
 }
 
@@ -89,20 +91,21 @@ function changeInvoiceState(documentID) {
     if (checkedInvoices.includes(documentID)) {
         delete checkedInvoices[checkedInvoices.indexOf(documentID)];
         checkedInvoices = checkedInvoices.filter((inv) => inv !== null);
-        $(`.mdc-layout-grid__cell--span-3 .mdc-list #list-item-${documentID}`).remove();
+        // $(`.mdc-layout-grid__cell--span-3 .mdc-list #list-item-${documentID}`).remove();
     } else {
         checkedInvoices.push(documentID);
-        const invoice = invoices.find((inv) => inv.id === documentID);
-        $('.mdc-list').append(`<li class="mdc-list-item" id="list-item-${documentID}">
-            <span class="mdc-list-item__ripple"></span>
-            <span class="mdc-list-item__text">${invoice.caption}</span>
-        </li>`);
+        // const invoice = invoices.find((inv) => inv.id === documentID);
+        // $('.mdc-list').append(`<li class="mdc-list-item" id="list-item-${documentID}">
+        //     <span class="mdc-list-item__ripple"></span>
+        //     <span class="mdc-list-item__text">${invoice.caption}</span>
+        // </li>`);
     }
     if (checkedInvoices.length > 0) {
         $('.mdc-button').show();
     } else {
         $('.mdc-button').hide();
     }
+    $('#checked-invoices').text(checkedInvoices.length);
 }
 
 function sortTable(event) {

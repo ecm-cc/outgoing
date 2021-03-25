@@ -4,6 +4,7 @@
 /* eslint-disable prefer-const */
 let metaData;
 let dialog;
+let dataTable;
 let responseDialog;
 let searchTextfield;
 let invoices = [];
@@ -17,8 +18,11 @@ window.onload = async () => {
     initMDCElements();
     showOverlay();
     invoices = await loadInvoices();
+    $('#all-invoices').text(invoices.length);
     displayedInvoices = JSON.parse(JSON.stringify(invoices));
     renderInvoices();
+    dataTable = new mdc.dataTable.MDCDataTable(document.querySelector('.mdc-data-table'));
+    dataTable.layout();
     initCheckboxes();
     fillDropdowns();
     hideOverlay();
@@ -32,7 +36,6 @@ function initMDCElements() {
     dialog = new mdc.dialog.MDCDialog(document.querySelector('#send-confirmation-dialog'));
     responseDialog = new mdc.dialog.MDCDialog(document.querySelector('#response-dialog'));
     mdc.linearProgress.MDCLinearProgress.attachTo(document.querySelector('.mdc-linear-progress'));
-    const dataTable = mdc.dataTable.MDCDataTable.attachTo(document.querySelector('.mdc-data-table'));
     document.addEventListener('MDCDataTable:sorted', sortTable);
 }
 
