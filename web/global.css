@@ -31,6 +31,10 @@ body {
     display: none;
 }
 
+/* .checkbox--disabled {
+    display: none;
+} */
+
 .mdc-button {
     display: none;
     margin-top: 16px;
