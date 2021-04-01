@@ -31,9 +31,9 @@ body {
     display: none;
 }
 
-/* .checkbox--disabled {
+.invisible {
     display: none;
-} */
+}
 
 .mdc-button {
     display: none;

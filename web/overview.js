@@ -23,6 +23,7 @@ window.onload = async () => {
     renderInvoices();
     initCheckboxes();
     fillDropdowns();
+    $('.table-checkbox').change(checkBoxListener);
     hideOverlay();
 };
 
@@ -74,34 +75,13 @@ function renderResponseOverlay(response) {
     dialogHTML.push(`<span class="mdc-typography--body2">
         Es wurde${checkedInvoices.length > 1 ? 'n' : ''} 
         ${checkedInvoices.length} Rechnung${checkedInvoices.length > 1 ? 'en' : ''} 
-        an Crossinx übermittelt.
+        an Crossinx übermittelt, davon waren ${response.succeded.length} erfolgreich und ${response.failed.length} fehlgeschlagen.
     </span><br>`);
-    if (response.failed.length > 0) {
-        dialogHTML.push(renderList(response.failed, 'Fehlgeschlagene Dokumente'));
-    }
-    if (response.succeded.length > 0) {
-        dialogHTML.push(renderList(response.succeded, 'Erfolgreiche Dokumente'));
-    }
     $('#response-dialog-content').html(dialogHTML.join(''));
     responseDialog.open();
     responseDialog.listen('MDCDialog:closed', (reason) => {
         location.reload();
     });
-}
-
-function renderList(documents, listTitle) {
-    const listHTML = [];
-    documents.forEach((documentID) => {
-        const document = invoices.find((inv) => inv.id === documentID);
-        listHTML.push(`<li class="mdc-list-item" id="list-item-${documentID}">
-            <span class="mdc-list-item__ripple"></span>
-            <span class="mdc-list-item__text">${document.caption}</span>
-        </li>`);
-    });
-    return `<br><span>${listTitle}</span>
-    <ul class="mdc-list">
-        ${listHTML.join('')}
-    </ul>`;
 }
 
 /**
