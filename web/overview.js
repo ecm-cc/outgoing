@@ -24,6 +24,7 @@ window.onload = async () => {
     initCheckboxes();
     fillDropdowns();
     $('.table-checkbox').change(checkBoxListener);
+    fillInitialFilter();
     hideOverlay();
 };
 

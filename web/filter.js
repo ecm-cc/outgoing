@@ -39,6 +39,10 @@ function fillDropdown(filterProperty, filterFieldName) {
     });
 }
 
+function fillInitialFilter() {
+    selects.processingstatus.value = 'Versandbereit';
+}
+
 function initCheckbox(id, field) {
     checkboxes[field] = $(`#${id}`);
     $(checkboxes[field]).on('click', () => {
