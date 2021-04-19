@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 function renderInvoices() {
     const promises = [];
-    displayedInvoices.forEach((invoice, i) => {
+    globals.displayedInvoices.forEach((invoice, i) => {
         const properties = {};
         invoice.displayProperties.forEach((prop) => { properties[prop.name] = prop.displayValue; });
         const isEnabled = properties.Verarbeitungsstatus === 'Versandbereit';
@@ -22,7 +22,7 @@ function renderInvoices() {
                     </div>
                 </td>
                 <th class="mdc-data-table__cell" id="row-${i}" scope="row">
-                    <a href="/dms/r/${metaData.config.repositoryID}/o2/${invoice.id}" target="dapi_navigate">
+                    <a href="/dms/r/${globals.metaData.config.repositoryID}/o2/${invoice.id}" target="dapi_navigate">
                     ${properties.Rechnungsnummer}
                     </a>
                 </th>
@@ -49,8 +49,8 @@ function renderInvoices() {
             </tr>`);
         promises.push(checkInvoiceDocuments(invoice));
     });
-    dataTable = new mdc.dataTable.MDCDataTable(document.querySelector('.mdc-data-table'));
-    dataTable.layout();
+    globals.dataTable = new mdc.dataTable.MDCDataTable(document.querySelector('.mdc-data-table'));
+    globals.dataTable.layout();
     $('.invoice-table').show();
 }
 
@@ -91,16 +91,15 @@ async function checkInvoiceDocuments(invoice) {
 function checkBoxListener() {
     setTimeout(() => {
         // uncheck disabled ones
-        checkedInvoices = [];
-        // const rows = dataTable.getRows();
-        const selectedRowsIDs = dataTable.getSelectedRowIds();
+        globals.checkedInvoices = [];
+        const selectedRowsIDs = globals.dataTable.getSelectedRowIds();
         selectedRowsIDs.forEach((rowID) => {
             if ($(`#checkbox-${rowID}`).is(':visible')) {
-                checkedInvoices.push(rowID.substring(4));
+                globals.checkedInvoices.push(rowID.substring(4));
             }
         });
-        $('#checked-invoices').text(checkedInvoices.length);
-        if (checkedInvoices.length > 0) {
+        $('#checked-invoices').text(globals.checkedInvoices.length);
+        if (globals.checkedInvoices.length > 0) {
             $('.mdc-button').show();
         } else {
             $('.mdc-button').hide();
@@ -111,7 +110,7 @@ function checkBoxListener() {
 function sortTable(event) {
     const sortProp = event.detail.columnId;
     const sortDirection = event.detail.sortValue;
-    displayedInvoices = displayedInvoices.sort((a, b) => {
+    globals.displayedInvoices = globals.displayedInvoices.sort((a, b) => {
         const propA = a.displayProperties.find((prop) => prop.name === sortProp);
         const propB = b.displayProperties.find((prop) => prop.name === sortProp);
         let valueA;
@@ -131,7 +130,7 @@ function sortTable(event) {
         }
         return valueB - valueA;
     });
-    displayedInvoices.forEach((inv) => {
+    globals.displayedInvoices.forEach((inv) => {
         $('tbody').append($(`#table-row-${inv.id}`));
     });
 }

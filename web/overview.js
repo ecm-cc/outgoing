@@ -2,29 +2,25 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
-let metaData;
-let dialog;
-let dataTable;
-let responseDialog;
-let searchTextfield;
-let invoices = [];
-let displayedInvoices = [];
-let checkedInvoices = [];
+const globals = {
+};
 
 window.onload = async () => {
-    metaData = $('#data-container').data('id');
-    await $.getScript(`${metaData.assetBasePath}/table.js`);
-    await $.getScript(`${metaData.assetBasePath}/filter.js`);
+    globals.metaData = $('#data-container').data('id');
+    await $.getScript(`${globals.metaData.assetBasePath}/table.js`);
+    await $.getScript(`${globals.metaData.assetBasePath}/filter.js`);
+    await $.getScript(`${globals.metaData.assetBasePath}/pagination.js`);
     initMDCElements();
     showOverlay();
-    invoices = await loadInvoices();
-    $('#all-invoices').text(invoices.length);
-    displayedInvoices = JSON.parse(JSON.stringify(invoices));
+    globals.invoices = await loadInvoices();
+    $('#all-invoices').text(globals.invoices.length);
+    globals.displayedInvoices = JSON.parse(JSON.stringify(globals.invoices));
     renderInvoices();
     initCheckboxes();
     fillDropdowns();
     $('.table-checkbox').change(checkBoxListener);
     fillInitialFilter();
+    await initPagination();
     hideOverlay();
 };
 
@@ -32,16 +28,16 @@ window.onload = async () => {
  * Configures and initializes Material components
  */
 function initMDCElements() {
-    searchTextfield = new mdc.textField.MDCTextField(document.querySelector('.mdc-text-field'));
-    dialog = new mdc.dialog.MDCDialog(document.querySelector('#send-confirmation-dialog'));
-    responseDialog = new mdc.dialog.MDCDialog(document.querySelector('#response-dialog'));
+    globals.searchTextfield = new mdc.textField.MDCTextField(document.querySelector('.mdc-text-field'));
+    globals.dialog = new mdc.dialog.MDCDialog(document.querySelector('#send-confirmation-dialog'));
+    globals.responseDialog = new mdc.dialog.MDCDialog(document.querySelector('#response-dialog'));
     mdc.linearProgress.MDCLinearProgress.attachTo(document.querySelector('.mdc-linear-progress'));
     document.addEventListener('MDCDataTable:sorted', sortTable);
 }
 
 async function loadInvoices() {
     const searchResults = await $.ajax({
-        url: metaData.searchURL,
+        url: globals.metaData.urls.search,
         method: 'GET',
         headers: {
             Accept: 'application/hal+json',
@@ -52,15 +48,16 @@ async function loadInvoices() {
 }
 
 async function sendInvoices() {
-    dialog.open();
-    dialog.listen('MDCDialog:closed', async (reason) => {
+    globals.dialog.open();
+    globals.dialog.listen('MDCDialog:closed', async (reason) => {
         if (reason.detail.action === 'ok') {
             showOverlay();
             try {
                 const data = await $.ajax({
-                    timeout: 90000,
+                    timeout: 120000,
                     method: 'POST',
                     url: '/able-outgoing/invoices',
+                    data: { invoices: JSON.stringify(globals.checkedInvoices) },
                 });
                 renderResponseOverlay(data);
             } catch (err) {
@@ -74,13 +71,13 @@ async function sendInvoices() {
 function renderResponseOverlay(response) {
     const dialogHTML = [];
     dialogHTML.push(`<span class="mdc-typography--body2">
-        Es wurde${checkedInvoices.length > 1 ? 'n' : ''} 
-        ${checkedInvoices.length} Rechnung${checkedInvoices.length > 1 ? 'en' : ''} 
+        Es wurde${globals.checkedInvoices.length > 1 ? 'n' : ''} 
+        ${globals.checkedInvoices.length} Rechnung${globals.checkedInvoices.length > 1 ? 'en' : ''} 
         an Crossinx übermittelt, davon waren ${response.succeded.length} erfolgreich und ${response.failed.length} fehlgeschlagen.
     </span><br>`);
     $('#response-dialog-content').html(dialogHTML.join(''));
-    responseDialog.open();
-    responseDialog.listen('MDCDialog:closed', (reason) => {
+    globals.responseDialog.open();
+    globals.responseDialog.listen('MDCDialog:closed', (reason) => {
         location.reload();
     });
 }

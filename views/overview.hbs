@@ -40,7 +40,7 @@
                             role="columnheader" scope="col">
                             <div class="mdc-checkbox mdc-data-table__header-row-checkbox mdc-checkbox--selected">
                                 <input type="checkbox" class="mdc-checkbox__native-control table-checkbox"
-                                    aria-label="Toggle all rows"/>
+                                    aria-label="Toggle all rows" />
                                 <div class="mdc-checkbox__background">
                                     <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
                                         <path class="mdc-checkbox__checkmark-path" fill="none"
@@ -78,6 +78,32 @@
                 <tbody class="mdc-data-table__content">
                 </tbody>
             </table>
+        </div>
+        <div class="mdc-data-table__pagination">
+            <div class="mdc-data-table__pagination-trailing">
+
+                <div class="mdc-data-table__pagination-navigation">
+                    <div class="mdc-data-table__pagination-total" id="pagination-total">
+                        0 bis <span id="visible-invoices">0</span> von 0 Ergebnissen
+                    </div>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                        data-first-page="true" id="pagination-first" disabled>
+                        <div class="mdc-button__icon">first_page</div>
+                    </button>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                        data-prev-page="true" id="pagination-left" disabled>
+                        <div class="mdc-button__icon">chevron_left</div>
+                    </button>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                        data-next-page="true" id="pagination-right" >
+                        <div class="mdc-button__icon">chevron_right</div>
+                    </button>
+                    <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
+                        data-last-page="true" id="pagination-last" >
+                        <div class="mdc-button__icon">last_page</div>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

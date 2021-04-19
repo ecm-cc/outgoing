@@ -16,7 +16,7 @@ function initCheckboxes() {
 
 function fillDropdown(filterProperty, filterFieldName) {
     let properties = [];
-    invoices.forEach((invoice) => {
+    globals.invoices.forEach((invoice) => {
         const { value } = invoice.displayProperties.find((prop) => prop.name === filterProperty);
         if (!properties.includes(value)) {
             properties.push(value);
@@ -55,7 +55,7 @@ function initCheckbox(id, field) {
 }
 
 function filter(name, searchedValue, id) {
-    displayedInvoices = displayedInvoices.filter((invoice) => {
+    globals.displayedInvoices = globals.displayedInvoices.filter((invoice) => {
         const { value } = invoice.displayProperties.find((prop) => prop.name === name);
         return value === searchedValue;
     });
@@ -75,9 +75,9 @@ function clearFilter(id) {
 }
 
 function search() {
-    const searchString = searchTextfield.value.toLowerCase();
+    const searchString = globals.searchTextfield.value.toLowerCase();
     if (searchString !== '') {
-        displayedInvoices = displayedInvoices.filter((invoice) => {
+        globals.displayedInvoices = globals.displayedInvoices.filter((invoice) => {
             const properties = {};
             invoice.displayProperties.forEach((prop) => { properties[prop.name] = prop.displayValue; });
             return properties.Organisationseinheit.toLowerCase().includes(searchString)
@@ -95,19 +95,22 @@ function search() {
 }
 
 function clearSearch() {
-    searchTextfield.value = '';
+    globals.searchTextfield.value = '';
     rebuild();
     rerenderTable();
 }
 
 function rerenderTable() {
     $('.mdc-data-table__row').hide();
-    displayedInvoices.forEach((invoice) => $(`#table-row-${invoice.id}`).show());
-    dataTable.layout();
+    // globals.checkedInvoices = [];
+    // $('.table-checkbox').click();
+    globals.displayedInvoices.forEach((invoice) => $(`#table-row-${invoice.id}`).show());
+    globals.dataTable.layout();
+    reloadPaginationText();
 }
 
 function rebuild() {
-    displayedInvoices = JSON.parse(JSON.stringify(invoices));
+    globals.displayedInvoices = JSON.parse(JSON.stringify(globals.invoices));
     add010208Values();
     search();
     Object.keys(selects).forEach((key) => {
@@ -123,7 +126,7 @@ function rebuild() {
 }
 
 function add010208Values() {
-    displayedInvoices.forEach((invoice) => {
+    globals.displayedInvoices.forEach((invoice) => {
         add010208Value(invoice);
     });
 }

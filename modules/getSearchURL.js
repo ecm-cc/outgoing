@@ -1,13 +1,13 @@
 const propertyMapping = require('@ablegroup/propertymapping');
 
-module.exports = async (config) => {
+module.exports = async (config, type = 'sr') => {
     propertyMapping.initDatabase();
-    const searchHost = `${config.host}/dms/r/${config.repositoryID}/sr/?objectdefinitionids`;
+    const searchHost = `${config.host}/dms/r/${config.repositoryID}/${type}/?objectdefinitionids`;
     const invoiceCategory = await getInvoiceCategory(config);
     const sorting = 'propertysort=property_last_modified_date';
     const searchProperties = await getSearchProperties(config);
     const searchURL = `${searchHost}=${invoiceCategory}&${searchProperties}&${sorting}`;
-    return searchURL;
+    return type === 'sr' ? `${searchURL}&pagesize=50` : searchURL;
 };
 
 async function getInvoiceCategory(config) {
