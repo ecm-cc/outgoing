@@ -102,8 +102,7 @@ function clearSearch() {
 
 function rerenderTable() {
     $('.mdc-data-table__row').hide();
-    // globals.checkedInvoices = [];
-    // $('.table-checkbox').click();
+    resetCheckedInvoices();
     globals.displayedInvoices.forEach((invoice) => $(`#table-row-${invoice.id}`).show());
     globals.dataTable.layout();
     reloadPaginationText();

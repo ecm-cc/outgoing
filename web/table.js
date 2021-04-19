@@ -107,6 +107,15 @@ function checkBoxListener() {
     }, 100);
 }
 
+function resetCheckedInvoices() {
+    if (globals.checkedInvoices) {
+        globals.checkedInvoices.forEach((docID) => {
+            $(`#checkbox-row-${docID} input`).click();
+        });
+        globals.checkedInvoices = [];
+    }
+}
+
 function sortTable(event) {
     const sortProp = event.detail.columnId;
     const sortDirection = event.detail.sortValue;
