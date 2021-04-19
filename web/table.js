@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-function renderInvoices() {
+function renderInvoices(invoicesToLoad, display = true) {
     const promises = [];
-    globals.displayedInvoices.forEach((invoice, i) => {
+    invoicesToLoad.forEach((invoice, i) => {
         const properties = {};
         invoice.displayProperties.forEach((prop) => { properties[prop.name] = prop.displayValue; });
         const isEnabled = properties.Verarbeitungsstatus === 'Versandbereit';
         $('.mdc-data-table__content').append(`
-            <tr class="mdc-data-table__row" data-row-id="row-${invoice.id}" id="table-row-${invoice.id}">
+            <tr class="mdc-data-table__row" data-row-id="row-${invoice.id}" id="table-row-${invoice.id}" ${display ? '' : 'style="display:none"'}>
                 <td class="mdc-data-table__cell mdc-data-table__cell--checkbox">
                 <div class="mdc-checkbox mdc-data-table__row-checkbox ${isEnabled ? '' : 'mdc-checkbox--disabled invisible'}" id="checkbox-row-${invoice.id}">
                 <input type="checkbox" class="mdc-checkbox__native-control table-checkbox" 

@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
 const globals = {
+    fullyLoaded: false,
 };
 
 window.onload = async () => {
@@ -15,12 +17,12 @@ window.onload = async () => {
     globals.invoices = await loadInvoices();
     $('#all-invoices').text(globals.invoices.length);
     globals.displayedInvoices = JSON.parse(JSON.stringify(globals.invoices));
-    renderInvoices();
+    renderInvoices(globals.invoices);
     initCheckboxes();
     fillDropdowns();
     $('.table-checkbox').change(checkBoxListener);
     fillInitialFilter();
-    await initPagination();
+    await initPagination(globals.metaData.config.pageSize);
     hideOverlay();
 };
 
@@ -44,7 +46,27 @@ async function loadInvoices() {
             'Content-Type': 'application/hal+json',
         },
     });
+    loadAllInvoices(searchResults._links.nextPage.href);
     return searchResults.items;
+}
+
+async function loadAllInvoices(pageLink) {
+    if (pageLink != null) {
+        const searchResults = await $.ajax({
+            url: globals.metaData.config.host + pageLink,
+            method: 'GET',
+            headers: {
+                Accept: 'application/hal+json',
+                'Content-Type': 'application/hal+json',
+            },
+        });
+        renderInvoices(searchResults.items, false);
+        globals.invoices = globals.invoices.concat(searchResults.items);
+        await loadAllInvoices(searchResults._links.nextPage ? searchResults._links.nextPage.href : null);
+    } else {
+        $('#all-invoices').text(globals.invoices.length);
+        globals.fullyLoaded = true;
+    }
 }
 
 async function sendInvoices() {

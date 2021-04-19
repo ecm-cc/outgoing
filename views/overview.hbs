@@ -87,19 +87,19 @@
                         0 bis <span id="visible-invoices">0</span> von 0 Ergebnissen
                     </div>
                     <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                        data-first-page="true" id="pagination-first" disabled>
+                        data-first-page="true" id="pagination-first" onclick="firstPage()" disabled>
                         <div class="mdc-button__icon">first_page</div>
                     </button>
                     <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                        data-prev-page="true" id="pagination-left" disabled>
+                        data-prev-page="true" id="pagination-left" onclick="previousPage()" disabled>
                         <div class="mdc-button__icon">chevron_left</div>
                     </button>
                     <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                        data-next-page="true" id="pagination-right" >
+                        data-next-page="true" id="pagination-right" onclick="nextPage()" >
                         <div class="mdc-button__icon">chevron_right</div>
                     </button>
                     <button class="mdc-icon-button material-icons mdc-data-table__pagination-button"
-                        data-last-page="true" id="pagination-last" >
+                        data-last-page="true" id="pagination-last" onclick="lastPage()">
                         <div class="mdc-button__icon">last_page</div>
                     </button>
                 </div>

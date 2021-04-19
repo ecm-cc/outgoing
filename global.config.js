@@ -5,6 +5,7 @@ function getLocalConfig(tenant) {
         stage: 'dev',
         host: 'https://able-group-dev.d-velop.cloud',
         repositoryID: '1a2cde3f-2913-3dc2-4a2e-e623459ac23a',
+        pageSize: 2,
     };
     // QAS
     case '197': return {

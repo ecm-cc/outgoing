@@ -100,12 +100,14 @@ function clearSearch() {
     rerenderTable();
 }
 
-function rerenderTable() {
+function rerenderTable(resetCheckedInvoices = true) {
     $('.mdc-data-table__row').hide();
-    resetCheckedInvoices();
+    if (resetCheckedInvoices) {
+        resetCheckedInvoices();
+    }
     globals.displayedInvoices.forEach((invoice) => $(`#table-row-${invoice.id}`).show());
     globals.dataTable.layout();
-    reloadPaginationText();
+    reloadPaginationElements();
 }
 
 function rebuild() {

@@ -7,7 +7,7 @@ module.exports = async (config, type = 'sr') => {
     const sorting = 'propertysort=property_last_modified_date';
     const searchProperties = await getSearchProperties(config);
     const searchURL = `${searchHost}=${invoiceCategory}&${searchProperties}&${sorting}`;
-    return type === 'sr' ? `${searchURL}&pagesize=50` : searchURL;
+    return type === 'sr' ? `${searchURL}&pagesize=${config.pageSize}` : searchURL;
 };
 
 async function getInvoiceCategory(config) {
