@@ -9,7 +9,8 @@ function renderInvoices(invoicesToLoad, display = true) {
         $('.mdc-data-table__content').append(`
             <tr class="mdc-data-table__row" data-row-id="row-${invoice.id}" id="table-row-${invoice.id}" ${display ? '' : 'style="display:none"'}>
                 <td class="mdc-data-table__cell mdc-data-table__cell--checkbox">
-                <div class="mdc-checkbox mdc-data-table__row-checkbox ${isEnabled ? '' : 'mdc-checkbox--disabled invisible'}" id="checkbox-row-${invoice.id}">
+                <div class="mdc-checkbox mdc-data-table__row-checkbox ${isEnabled ? '"  data-checkable="true"' : 'mdc-checkbox--disabled invisible"'}
+                id="checkbox-row-${invoice.id}">
                 <input type="checkbox" class="mdc-checkbox__native-control table-checkbox" 
                          aria-labelledby="row-${invoice.id}" ${isEnabled ? '' : 'disabled'}/>
                     <div class="mdc-checkbox__background">
@@ -94,7 +95,7 @@ function checkBoxListener() {
         globals.checkedInvoices = [];
         const selectedRowsIDs = globals.dataTable.getSelectedRowIds();
         selectedRowsIDs.forEach((rowID) => {
-            if ($(`#checkbox-${rowID}`).is(':visible')) {
+            if ($(`#checkbox-${rowID}`).data('checkable')) {
                 globals.checkedInvoices.push(rowID.substring(4));
             }
         });
@@ -104,7 +105,7 @@ function checkBoxListener() {
         } else {
             $('.mdc-button').hide();
         }
-    }, 100);
+    }, 300);
 }
 
 function resetCheckedInvoices() {

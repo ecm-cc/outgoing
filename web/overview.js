@@ -14,7 +14,7 @@ window.onload = async () => {
     await $.getScript(`${globals.metaData.assetBasePath}/pagination.js`);
     initMDCElements();
     showOverlay();
-    globals.invoices = await loadInvoices();
+    await loadInvoices();
     $('#all-invoices').text(globals.invoices.length);
     globals.displayedInvoices = JSON.parse(JSON.stringify(globals.invoices));
     renderInvoices(globals.invoices);
@@ -46,8 +46,8 @@ async function loadInvoices() {
             'Content-Type': 'application/hal+json',
         },
     });
-    loadAllInvoices(searchResults._links.nextPage.href);
-    return searchResults.items;
+    globals.invoices = searchResults.items;
+    loadAllInvoices(searchResults._links.nextPage ? searchResults._links.nextPage.href : null);
 }
 
 async function loadAllInvoices(pageLink) {

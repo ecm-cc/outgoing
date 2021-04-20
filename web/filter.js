@@ -102,9 +102,10 @@ function clearSearch() {
 
 function rerenderTable(resetCheckedInvoices = true) {
     $('.mdc-data-table__row').hide();
-    if (resetCheckedInvoices) {
-        resetCheckedInvoices();
-    }
+    // if (resetCheckedInvoices) {
+    //     resetCheckedInvoices();
+    // }
+    // TODO
     globals.displayedInvoices.forEach((invoice) => $(`#table-row-${invoice.id}`).show());
     globals.dataTable.layout();
     reloadPaginationElements();
