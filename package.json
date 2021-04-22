@@ -20,7 +20,8 @@
     "express-handlebars": "^5.2.0",
     "http-errors": "^1.8.0",
     "morgan": "^1.10.0",
-    "ssh2-sftp-client": "^6.0.1"
+    "ssh2-sftp-client": "^6.0.1",
+    "vue": "^1.0.28-csp"
   },
   "devDependencies": {
     "eslint": "^7.3.1",
