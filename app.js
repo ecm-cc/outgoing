@@ -24,7 +24,7 @@ app.engine('hbs', hbs({
     },
 }));
 app.set('view engine', 'hbs');
-app.use(`${basePath}/assets`, express.static(path.join(__dirname, '/vue/table/dist/')));
+app.use(`${basePath}/assets`, express.static(path.join(__dirname, '/frontend/dist/')));
 
 app.use(tenant);
 app.use(requestId);

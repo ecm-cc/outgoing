@@ -14,7 +14,7 @@ module.exports = (assetBasePath) => {
         const metaData = await getMetaData(config, assetBasePath);
         res.format({
             'text/html': () => {
-                res.sendFile(path.join(__dirname, '../vue/table/dist/index.html'));
+                res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
                 // res.render('overview', {
                 //     title: 'Order to Cash Services',
                 //     stylesheet: `${assetBasePath}/global.css`,
