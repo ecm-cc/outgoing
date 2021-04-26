@@ -5,32 +5,33 @@
     </v-flex>
     <v-flex xs6>
       <v-text-field
+        v-model="search"
         append-icon="mdi-magnify"
         label="Suche"
         single-line
         hide-details
-        @input="filterSearch"
       ></v-text-field>
-    </v-flex>
-    <v-flex xs6>
-      <v-select
-        :items="orgUnits"
-        label="Organisationseinheiten"
-        @change="filterOrgUnit"
-      ></v-select>
     </v-flex>
     <v-flex xs12>
       <v-data-table
+        dense
+        class="elevation-1"
         v-model="selected"
         :headers="headers"
         :items="invoices"
         item-key="invoiceNumber"
         show-select
-        :search="filters.search"
-        :custom-filter="customFilter"
+        :search="search"
         :loading="isLoading"
         locale="de-DE">
       </v-data-table>
+      <template v-slot:body.prepend>
+        <tr>
+          <td>
+            <v-text-field v-model="orgUnit" type="text" label="Organisationseinheit"></v-text-field>
+          </td>
+        </tr>
+      </template>
     </v-flex>
   </v-layout>
 </template>
@@ -46,39 +47,9 @@ export default {
 
   data: () => ({
     isLoading: true,
-    filters: {
-      search: '',
-      orgUnit: '',
-    },
     search: '',
+    orgUnit: '',
     selected: [],
-    orgUnits: ['1233 - NL Siegen', '1245 - NL Stuttgart Mobility', '1232 - NL Wuppertal'],
-    headers: [
-      {
-        text: 'Rechnungsnummer',
-        align: 'start',
-        sortable: false,
-        value: 'invoiceNumber',
-      },
-      { text: 'Buchungskreis ID', value: 'companyCode' },
-      { text: 'Organisationseinheit', value: 'orgUnit' },
-      { text: 'Debitorennummer (AG)', value: 'debitorNumberAG' },
-      { text: 'Debitorennname (AG)', value: 'debitorNameAG' },
-      { text: 'Debitorennummer (WE)', value: 'debitorNumberWE' },
-      { text: 'Debitorennname (WE)', value: 'debitorNameWE' },
-      { text: 'Rechnungsgesamtbetrag, brutto', value: 'invoiceSumBrutto' },
-      { text: 'Währung', value: 'currency' },
-      { text: 'Ersteller SAP', value: 'creatorSAP' },
-      { text: 'Erstelldatum (SAP)', value: 'createDateSAP' },
-      { text: '01', value: 'docs01' },
-      { text: '02', value: 'docs02' },
-      { text: '08', value: 'docs08' },
-      { text: 'E-Invoice', value: 'eInvoice' },
-      { text: 'Rechnungsanlage Kunde', value: 'attachmentCustomer' },
-      { text: 'Verarbeitungsstatus', value: 'processingState' },
-      { text: 'Versandzeitpunkt', value: 'transportTime' },
-      { text: 'Versandrückmeldezeitpunkt', value: 'transportResponseTime' },
-    ],
     invoices: [],
   }),
   async mounted() {
@@ -99,6 +70,40 @@ export default {
     }
     this.renderTable(data);
     this.isLoading = false;
+  },
+  computed: {
+    headers() {
+      return [
+        {
+          text: 'Rechnungsnummer',
+          align: 'start',
+          sortable: false,
+          value: 'invoiceNumber',
+        },
+        { text: 'Buchungskreis ID', value: 'companyCode' },
+        {
+          text: 'Organisationseinheit',
+          value: 'orgUnit',
+          filter: (f) => (`${f}`).toLowerCase().includes(this.orgUnit).toLowerCase(),
+        },
+        { text: 'Debitorennummer (AG)', value: 'debitorNumberAG' },
+        { text: 'Debitorennname (AG)', value: 'debitorNameAG' },
+        { text: 'Debitorennummer (WE)', value: 'debitorNumberWE' },
+        { text: 'Debitorennname (WE)', value: 'debitorNameWE' },
+        { text: 'Rechnungsgesamtbetrag, brutto', value: 'invoiceSumBrutto' },
+        { text: 'Währung', value: 'currency' },
+        { text: 'Ersteller SAP', value: 'creatorSAP' },
+        { text: 'Erstelldatum (SAP)', value: 'createDateSAP' },
+        { text: '01', value: 'docs01' },
+        { text: '02', value: 'docs02' },
+        { text: '08', value: 'docs08' },
+        { text: 'E-Invoice', value: 'eInvoice' },
+        { text: 'Rechnungsanlage Kunde', value: 'attachmentCustomer' },
+        { text: 'Verarbeitungsstatus', value: 'processingState' },
+        { text: 'Versandzeitpunkt', value: 'transportTime' },
+        { text: 'Versandrückmeldezeitpunkt', value: 'transportResponseTime' },
+      ];
+    },
   },
   methods: {
     renderTable(searchData) {
@@ -124,37 +129,6 @@ export default {
         transportResponseTime: item.displayProperties.find((prop) => prop.name === 'Versandrückmeldezeitpunkt').value,
       }));
       this.invoices = sortedInvoices;
-    },
-    customFilter(items, filters, filter, headers) {
-      const cf = new this.$MultiFilters(items, filters, filter, headers);
-
-      cf.registerFilter('search', function (searchWord, items) {
-        if (searchWord.trim() === '') return items;
-
-        return items.filter((item) => {
-          return item.invoiceNumber.toLowerCase().includes(searchWord.toLowerCase());
-        }, searchWord);
-
-      });
-
-      cf.registerFilter('orgUnit', function (orgUnit, items) {
-        if (orgUnit.trim() === '') return items;
-
-        return items.filter((item) => {
-          return item.orgUnit.toLowerCase() === orgUnit.toLowerCase();
-        }, orgUnit);
-
-      });
-
-      return cf.runFilters();
-    },
-
-    filterSearch(val) {
-      this.filters = this.$MultiFilters.updateFilters(this.filters, { search: val });
-    },
-
-    filterOrgUnit(val) {
-      this.filters = this.$MultiFilters.updateFilters(this.filters, { orgUnit: val });
     },
   },
 };
