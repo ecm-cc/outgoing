@@ -14,14 +14,7 @@ module.exports = (assetBasePath) => {
         const metaData = await getMetaData(config, assetBasePath);
         res.format({
             'text/html': () => {
-                res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-                // res.render('overview', {
-                //     title: 'Order to Cash Services',
-                //     stylesheet: `${assetBasePath}/global.css`,
-                //     script: `${assetBasePath}/overview.js`,
-                //     body: '/../views/overview.hbs',
-                //     metaData: JSON.stringify(metaData),
-                // });
+                res.sendFile(path.join(`${__dirname}`, '/../views/index.html'));
             },
             default() {
                 res.status(406).send('Not Acceptable');

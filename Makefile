@@ -17,7 +17,7 @@ test: init
 build: clean build-lambda
 
 build-lambda: test
-	zip -X -r ./dist/lambda.zip *.js node_modules modules routes frontend/dist
+	zip -X -r ./dist/lambda.zip *.js node_modules modules routes frontend/dist views
 
 tf-bucket:
 	$(eval BUCKET_NAME=$(APP_NAME)-terraform)
@@ -51,7 +51,7 @@ apply: plan
 
 deploy-assets: asset_hash apply
 	# best practice for immutable content: cache 1 year (vgl https://jakearchibald.com/2016/caching-best-practices/)
-	aws s3 sync ./frontend/dist s3://$(APP_NAME)-assets/$(ASSET_HASH) --exclude "*.html" --cache-control max-age=31536000
+	aws s3 sync ./web s3://$(APP_NAME)-assets/$(ASSET_HASH) --cache-control max-age=31536000
 
 asset_hash:
 	$(eval ASSET_HASH=$(shell find web -type f ! -path "*.html" -exec md5sum {} \; | sort -k 2 | md5sum | tr -d " -"))

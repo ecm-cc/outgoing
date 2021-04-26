@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const hbs = require('express-handlebars');
 const tenant = require('@ablegroup/tenant')(process.env.systemBaseUri, process.env.SIGNATURE_SECRET);
 const requestId = require('@ablegroup/requestid');
 
@@ -13,17 +12,6 @@ const assetBasePath = process.env.ASSET_BASE_PATH || `/${appName}/assets`;
 
 const app = express();
 
-app.set('views', path.join(__dirname, 'views'));
-app.engine('hbs', hbs({
-    extname: 'hbs',
-    defaultLayout: 'layout',
-    layoutsDir: `${__dirname}/views/`,
-    partialsDir: `${__dirname}/views/partials/`,
-    helpers: {
-        // helpers,
-    },
-}));
-app.set('view engine', 'hbs');
 app.use(`${basePath}/assets`, express.static(path.join(__dirname, '/frontend/dist/')));
 
 app.use(tenant);
