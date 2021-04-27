@@ -20,6 +20,7 @@ logger.token('tenantId', (req) => req.tenantId);
 logger.token('requestId', (req) => req.requestId);
 
 const rootRouter = require('./routes/root')(basePath, assetBasePath);
+const searchRouter = require('./routes/search')();
 const featuresRouter = require('./routes/features')(basePath, assetBasePath);
 const overviewRouter = require('./routes/overview')(assetBasePath);
 const invoicesRouter = require('./routes/invoices')();
@@ -35,6 +36,7 @@ app.use(`${basePath}/`, rootRouter);
 app.use(`${basePath}/features`, featuresRouter);
 app.use(`${basePath}/overview`, overviewRouter);
 app.use(`${basePath}/invoices`, invoicesRouter);
+app.use(`${basePath}/search`, searchRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

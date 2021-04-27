@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 function getLocalConfig(tenant) {
     switch (tenant) {
     // DEV
@@ -5,7 +7,10 @@ function getLocalConfig(tenant) {
         stage: 'dev',
         host: 'https://able-group-dev.d-velop.cloud',
         repositoryID: '1a2cde3f-2913-3dc2-4a2e-e623459ac23a',
-        pageSize: 2,
+        pageSize: 100,
+        lightsailURL: 'https://ecm-inbound.able-group.de/invoice?stage=dev',
+        lightsailUser: process.env.LIGHTSAIL_USER,
+        lightsailPass: process.env.LIGHTSAIL_PASS,
     };
     // QAS
     case '197': return {

@@ -1,10 +1,8 @@
 <template>
   <v-container>
-    <v-row class="mt-2">
-      <!-- v-container ?? -->
-      <v-col col="9">
+    <v-row>
+      <v-col cols="9">
         <v-data-table
-          dense
           class="elevation-1"
           v-model="selected"
           :headers="headers"
@@ -19,58 +17,92 @@
               verfügbar oder ein Fehler liegt vor.
             </template>
             <template v-slot:no-results>
-              Zu dieser Anfrage konnten keine Suchergebnisse gefunden werden.
+              Keine Ergebnisse gefunden.
             </template>
             <template v-slot:top>
-              <v-row>
-                <v-col col="6">
-                  <h1 class="text-h6 mt-4">Rechungen an Crossinx versenden</h1>
-                </v-col>
-                <v-col col="6">
-                  <v-text-field
-                    v-model="search"
-                    append-icon="mdi-magnify"
-                    label="Suche"
-                    single-line
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-select :clearable="true" v-model="orgUnit" :items="orgUnits" label="Organisationseinheit"></v-select>
-                </v-col>
-                <v-col cols="2">
-                  <v-select :clearable="true" v-model="companyCode" :items="companyCodes" label="Buchungskreis ID"></v-select>
-                </v-col>
-                <v-col cols="2">
-                  <v-select :clearable="true" v-model="processingState" :items="processingStates" label="Verarbeitungsstatus"></v-select>
-                </v-col>
-                <v-col cols="1">
-                  <v-checkbox v-model="docs01" label="01 vorhanden"></v-checkbox>
-                </v-col>
-                <v-col cols="1">
-                  <v-checkbox v-model="docs02" label="02 vorhanden"></v-checkbox>
-                </v-col>
-                <v-col cols="1">
-                  <v-checkbox v-model="docs08" label="08 vorhanden"></v-checkbox>
-                </v-col>
-              </v-row>
+              <v-container>
+                <v-row>
+                  <v-col cols="4" class="pb-0">
+                    <h1 class="text-h6 mt-4">Rechungen an Crossinx versenden</h1>
+                  </v-col>
+                  <v-col cols="4" class="pb-0">
+                    <v-text-field
+                      v-model="search"
+                      append-icon="mdi-magnify"
+                      label="Suche"
+                      single-line
+                      hide-details
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="4" class="pb-0">
+                    <v-select :clearable="true" v-model="orgUnit" :items="orgUnits" label="Organisationseinheit"></v-select>
+                  </v-col>
+                  <v-col cols="3" class="pt-0">
+                    <v-select :clearable="true" v-model="companyCode" :items="companyCodes" label="Buchungskreis ID"></v-select>
+                  </v-col>
+                  <v-col cols="3" class="pt-0">
+                    <v-select :clearable="true" v-model="processingState" :items="processingStates" label="Verarbeitungsstatus"></v-select>
+                  </v-col>
+                  <v-col cols="2" class="pt-0">
+                    <v-checkbox v-model="docs01" label="01 vorhanden"></v-checkbox>
+                  </v-col>
+                  <v-col cols="2" class="pt-0">
+                    <v-checkbox v-model="docs02" label="02 vorhanden"></v-checkbox>
+                  </v-col>
+                  <v-col cols="2" class="pt-0">
+                    <v-checkbox v-model="docs08" label="08 vorhanden"></v-checkbox>
+                  </v-col>
+                </v-row>
+              </v-container>
             </template>
           </v-data-table>
       </v-col>
-      <v-col col="3">
-        <h2 class="text-h6">Ausgewählte Rechnungen</h2>
+      <v-col cols="3">
+        <v-container>
+          <h2 class="text-h6 mt-4">Ausgewählte Rechnungen</h2>
+          <p class="text-body-2 mt-4">{{selected.length}} von {{invoices.length}} Rechnungen zum Versand ausgewählt.</p>
+          <v-dialog v-model="dialog" persistent max-width="400" v-if="selected.length > 0">
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn color="primary" @click="dialog = true" v-bind="attrs" v-on="on">Absenden</v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="headline">Rechnungen absenden?</v-card-title>
+              <v-card-text>
+                Möchten Sie wirklich {{selected.length}} Rechnung<span v-if="selected.length > 1">en</span> an Crossinx versenden?
+                Sie werden nach Versandabschluss per E-Mail benachrichtigt.
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="dialog = false">Nein</v-btn>
+                <v-btn color="primary" text @click="dialog = false; overlay = !overlay; sendInvoices();">Ja</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-container>
       </v-col>
     </v-row>
+    <v-overlay absolute opacity="0.8" :value="overlay">
+      <v-progress-linear
+        indeterminate
+        color="primary"
+        class="mb-0"
+      ></v-progress-linear>
+      Rechnungen werden versendet, bitte warten..
+    </v-overlay>
   </v-container>
 </template>
 
 <script>
 import Vue from 'vue';
-const axios = require('axios');
-const testData = require('../example/searchResults');
+import axios from 'axios';
+import { getConfig } from '../plugins/config';
+import testData from '../example/searchResults';
+
 export default {
   name: 'Table',
   data: () => ({
+    overlay: false,
+    dialog: false,
     isLoading: true,
     search: '',
     orgUnit: '',
@@ -84,26 +116,28 @@ export default {
     docs08: false,
     selected: [],
     invoices: [],
+    config: {}
   }),
   async mounted() {
     let data;
     if (Vue.config.devtools) {
       data = testData;
+      this.isLoading = false;
     } else {
+      this.config = await getConfig(window.location.host);
       const response = await axios({
         method: 'GET',
-        // TODO
-        url: 'https://able-group-dev.d-velop.cloud/dms/r/1a2cde3f-2913-3dc2-4a2e-e623459ac23a/sr/?objectdefinitionids=[%22AKUNR%22]&properties={%22262%22:[%22Offen%22,%20%22Fehler%22,%20%22Versandbereit%22],%22233%22:[%22%22],%22264%22:[%22%22],%22263%22:[%22%22]}&propertysort=property_last_modified_date&pagesize=2',
+        url: this.config.searchURL,
         headers: {
           Accept: 'application/hal+json',
           'Content-Type': 'application/hal+json',
         },
       });
       data = response.data;
+      this.loadBackgroundData(data._links.nextPage ? data._links.nextPage.href : null);
     }
     this.renderTable(data);
     this.fillDropdowns();
-    this.isLoading = false;
   },
   computed: {
     headers() {
@@ -162,6 +196,7 @@ export default {
   methods: {
     renderTable(searchData) {
       const sortedInvoices = searchData.items.map((item) => ({
+        id: item.id,
         invoiceNumber: item.displayProperties.find((prop) => prop.name === 'Rechnungsnummer').value,
         companyCode: item.displayProperties.find((prop) => prop.name === 'Buchungskreis ID').value,
         orgUnit: item.displayProperties.find((prop) => prop.name === 'Organisationseinheit').value,
@@ -182,12 +217,15 @@ export default {
         transportTime: item.displayProperties.find((prop) => prop.name === 'Versandzeitpunkt').value,
         transportResponseTime: item.displayProperties.find((prop) => prop.name === 'Versandrückmeldezeitpunkt').value,
       }));
-      this.invoices = sortedInvoices;
+      this.invoices = this.invoices.concat(sortedInvoices);
     },
     fillDropdowns() {
       this.orgUnits = this.invoices.map((element) => element.orgUnit);
+      this.orgUnits.sort();
       this.companyCodes = this.invoices.map((element) => element.companyCode);
+      this.companyCodes.sort();
       this.processingStates = this.invoices.map((element) => element.processingState);
+      this.processingStates.sort();
     },
     checkStatusflag(fieldValue, documentCategory) {
       const index = documentCategory - 1;
@@ -196,6 +234,48 @@ export default {
       } else {
         const statusValue = fieldValue[index];
         return statusValue === '1' ? 'X' : '';
+      }
+    },
+    async loadBackgroundData(pageLink) {
+      if (pageLink != null) {
+        const response = await axios({
+          method: 'GET',
+          url: this.config.host + pageLink,
+          headers: {
+            Accept: 'application/hal+json',
+            'Content-Type': 'application/hal+json',
+          },
+        });
+        const data = response.data;
+        this.renderTable(data);
+        this.fillDropdowns();
+        await this.loadBackgroundData(data._links.nextPage ? data._links.nextPage.href : null);
+      } else {
+        this.isLoading = false;
+      }
+    },
+    sendInvoices() {
+      this.overlay = true;
+      if(Vue.config.devtools) {
+        this.overlay = false;
+        location.reload();
+      } else {
+        const options = {
+          method: 'post',
+          url: '/able-outgoing/invoices',
+          data: { invoices: JSON.stringify(this.selected.map((item) => item.id)) },
+          timeout: 120000,
+        };
+        axios(options)
+          .then(() => { 
+            this.overlay = false;
+            location.reload();
+          })
+          .catch((err) => {
+            console.error(err);
+            this.overlay = false;
+          }
+        );
       }
     }
   },
