@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "echo Running ESLint ... && npx eslint **/*.js && echo done && docker-build deploy",
     "build": "cd frontend && npx vue-cli-service build",
-    "builddeploy": "npm run build && npm run deploy"
+    "builddeploy": "npm run build && npm run deploy",
+    "serve": "cd frontend && npx vue-cli-service serve"
   },
   "dependencies": {
     "@ablegroup/httpoptions": "^1.0.3",

@@ -12,12 +12,21 @@
           :search="search"
           :loading="isLoading"
           locale="de-DE">
+            <template v-slot:loading>
+              Rechnungen werden geladen..
+            </template>
             <template v-slot:no-data>
               Die Rechnungsakten konnten nicht geladen werden. Entweder es sind keine versandbereiten Rechnungen
               verfügbar oder ein Fehler liegt vor.
             </template>
             <template v-slot:no-results>
               Keine Ergebnisse gefunden.
+            </template>
+            <template v-slot:item.invoiceNumber="{ item }">
+              <a :href="item.link" target="dapi_navigate"> {{ item.invoiceNumber }} </a>
+            </template>
+            <template v-slot:footer.page-text="{ pageStart, pageStop, itemsLength }">
+              {{pageStart}} bis {{pageStop}} von {{itemsLength}}
             </template>
             <template v-slot:top>
               <v-container>
@@ -197,6 +206,7 @@ export default {
     renderTable(searchData) {
       const sortedInvoices = searchData.items.map((item) => ({
         id: item.id,
+        link: `${this.config.host}/dms/r/${this.config.repositoryID}/o2/${item.id}`,
         invoiceNumber: item.displayProperties.find((prop) => prop.name === 'Rechnungsnummer').value,
         companyCode: item.displayProperties.find((prop) => prop.name === 'Buchungskreis ID').value,
         orgUnit: item.displayProperties.find((prop) => prop.name === 'Organisationseinheit').value,
