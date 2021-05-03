@@ -43,8 +43,11 @@
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="4" class="pb-0">
+                  <v-col cols="3" class="pb-0">
                     <v-select :clearable="true" v-model="orgUnit" :items="orgUnits" label="Organisationseinheit"></v-select>
+                  </v-col>
+                  <v-col cols="1" class="pb-0 d-none" align="center">
+                    <v-icon @click="refreshData()" hidden>mdi-refresh</v-icon>
                   </v-col>
                   <v-col cols="3" class="pt-0">
                     <v-select :clearable="true" v-model="companyCode" :items="companyCodes" label="Buchungskreis ID"></v-select>
@@ -128,23 +131,7 @@ export default {
     config: {}
   }),
   async mounted() {
-    let data;
-    if (Vue.config.devtools) {
-      data = testData;
-      this.isLoading = false;
-    } else {
-      this.config = await getConfig(window.location.host);
-      const response = await axios({
-        method: 'GET',
-        url: this.config.searchURL,
-        headers: {
-          Accept: 'application/hal+json',
-          'Content-Type': 'application/hal+json',
-        },
-      });
-      data = response.data;
-      this.loadBackgroundData(data._links.nextPage ? data._links.nextPage.href : null);
-    }
+    const data = await this.loadData();
     this.renderTable(data);
     this.fillDropdowns();
   },
@@ -203,6 +190,26 @@ export default {
     },
   },
   methods: {
+    async loadData() {
+      let data;
+      if (Vue.config.devtools) {
+        data = testData;
+        this.isLoading = false;
+      } else {
+        this.config = await getConfig(window.location.host);
+        const response = await axios({
+          method: 'GET',
+          url: this.config.searchURL,
+          headers: {
+            Accept: 'application/hal+json',
+            'Content-Type': 'application/hal+json',
+          },
+        });
+        data = response.data;
+        this.loadBackgroundData(data._links.nextPage ? data._links.nextPage.href : null);
+      }
+      return data;
+    },
     renderTable(searchData) {
       const sortedInvoices = searchData.items.map((item) => ({
         id: item.id,
@@ -263,6 +270,9 @@ export default {
       } else {
         this.isLoading = false;
       }
+    },
+    async refreshData() {
+      console.log(1);
     },
     sendInvoices() {
       this.overlay = true;
