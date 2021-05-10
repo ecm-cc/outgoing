@@ -11,6 +11,11 @@
           show-select
           :search="search"
           :loading="isLoading"
+          :footer-props="{
+            itemsPerPageOptions: [20, 50, 100, -1],
+            itemsPerPageAllText: 'Alle',
+            itemsPerPageText: 'Elemente pro Seite:'
+          }"
           locale="de-DE">
             <template v-slot:loading>
               Rechnungen werden geladen..
@@ -56,13 +61,13 @@
                     <v-select :clearable="true" v-model="processingState" :items="processingStates" label="Verarbeitungsstatus"></v-select>
                   </v-col>
                   <v-col cols="2" class="pt-0">
-                    <v-checkbox v-model="docs01" label="01 vorhanden"></v-checkbox>
+                    <v-checkbox v-model="docs01" label="01 - SAP Abrechnung"></v-checkbox>
                   </v-col>
                   <v-col cols="2" class="pt-0">
-                    <v-checkbox v-model="docs02" label="02 vorhanden"></v-checkbox>
+                    <v-checkbox v-model="docs02" label="02 - Rechnungsanlage"></v-checkbox>
                   </v-col>
                   <v-col cols="2" class="pt-0">
-                    <v-checkbox v-model="docs08" label="08 vorhanden"></v-checkbox>
+                    <v-checkbox v-model="docs08" label="08 - XML Rechnung"></v-checkbox>
                   </v-col>
                 </v-row>
               </v-container>
@@ -158,7 +163,7 @@ export default {
         { text: 'Debitorennname (AG)', value: 'debitorNameAG' },
         { text: 'Debitorennummer (WE)', value: 'debitorNumberWE' },
         { text: 'Debitorennname (WE)', value: 'debitorNameWE' },
-        { text: 'Rechnungsgesamtbetrag, brutto', value: 'invoiceSumBrutto' },
+        { text: 'Rechnungsgesamtbetrag, brutto', value: 'invoiceSumBrutto', align:'right' },
         { text: 'Währung', value: 'currency' },
         { text: 'Ersteller SAP', value: 'creatorSAP' },
         { text: 'Erstelldatum (SAP)', value: 'createDateSAP' },
