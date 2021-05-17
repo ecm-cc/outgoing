@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "echo Running ESLint ... && npx eslint **/*.js && echo done && docker-build deploy"
+    "deploy": "echo Running ESLint ... && npx eslint **/*.js && echo done && docker-build deploy",
+    "build": "cd frontend && npx vue-cli-service build",
+    "builddeploy": "npm run build && npm run deploy",
+    "serve": "cd frontend && npx vue-cli-service serve"
   },
   "dependencies": {
     "@ablegroup/httpoptions": "^1.0.3",
@@ -16,11 +19,13 @@
     "aws-serverless-express": "^3.4.0",
     "axios": "^0.21.1",
     "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^5.2.0",
     "http-errors": "^1.8.0",
     "morgan": "^1.10.0",
-    "ssh2-sftp-client": "^6.0.1"
+    "ssh2-sftp-client": "^6.0.1",
+    "vue": "^1.0.28-csp"
   },
   "devDependencies": {
     "eslint": "^7.3.1",

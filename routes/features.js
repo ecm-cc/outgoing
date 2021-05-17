@@ -12,8 +12,8 @@ module.exports = (basePath, assetBasePath) => {
                     features: [
                         {
                             url: `${basePath}/overview`,
-                            title: 'Order to Cash Services',
-                            subtitle: 'Seht her, ich bin eine Kachel!',
+                            title: 'O2CS',
+                            subtitle: 'Rechnungen versenden',
                             iconURI: `${assetBasePath}/icon.svg`,
                             summary: 'Versenden von Rechnungen an Crossinx.',
                             description: 'Sie sehen Rechnungen ein und wählen die aus, die an Crossinx versendet werden.',

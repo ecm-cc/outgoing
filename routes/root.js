@@ -1,6 +1,6 @@
 const express = require('express');
 
-module.exports = (basePath, assetBasePath) => {
+module.exports = (basePath) => {
     const router = express.Router();
 
     router.get('/', (req, res) => {
@@ -14,14 +14,6 @@ module.exports = (basePath, assetBasePath) => {
                             href: `${basePath}/features`,
                         },
                     },
-                });
-            },
-            'text/html': () => {
-                res.render('root', {
-                    title: 'Testseite',
-                    stylesheet: `${assetBasePath}/global.css`,
-                    script: `${assetBasePath}/root.js`,
-                    body: '/../views/root.hbs',
                 });
             },
             default() {

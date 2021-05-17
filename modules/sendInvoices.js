@@ -1,14 +1,13 @@
 const axios = require('axios');
 
-module.exports = async (invoices, cookie) => {
-    console.debug(`trying to send ${invoices.length} invoices`);
+module.exports = async (invoices, cookie, config) => {
     try {
         await axios({
-            url: 'https://ecm-inbound.able-group.de/invoice?stage=dev',
+            url: config.lightsailURL,
             method: 'post',
             auth: {
-                username: 'sap_outgoing',
-                password: 'Y|lnyVjKG*Cd~I3,',
+                username: config.lightsailUser,
+                password: config.lightsailPass,
             },
             headers: {
                 Cookie: cookie,
@@ -17,7 +16,6 @@ module.exports = async (invoices, cookie) => {
                 invoices,
             },
         });
-        console.debug('Worked');
     } catch (err) {
         console.debug(err);
     }

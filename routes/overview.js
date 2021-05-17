@@ -1,24 +1,15 @@
 const express = require('express');
-const { getLocalConfig } = require('../global.config');
-const getSearchURL = require('../modules/getSearchURL');
+const path = require('path');
 
-module.exports = (assetBasePath) => {
+module.exports = () => {
     const router = express.Router();
 
     router.get('/', async (req, res) => {
         console.log(`TenantId:${req.tenantId}`);
         console.log(`SystemBaseUri:${req.systemBaseUri}`);
-        const config = getLocalConfig(req.tenantId);
-        const metaData = await getMetaData(config, assetBasePath);
         res.format({
             'text/html': () => {
-                res.render('overview', {
-                    title: 'Order to Cash Services',
-                    stylesheet: `${assetBasePath}/global.css`,
-                    script: `${assetBasePath}/overview.js`,
-                    body: '/../views/overview.hbs',
-                    metaData: JSON.stringify(metaData),
-                });
+                res.sendFile(path.join(`${__dirname}`, '/../views/index.html'));
             },
             default() {
                 res.status(406).send('Not Acceptable');
@@ -27,16 +18,3 @@ module.exports = (assetBasePath) => {
     });
     return router;
 };
-
-async function getMetaData(config, assetBasePath) {
-    const search = await getSearchURL(config);
-    const searchCount = await getSearchURL(config, 'sfc');
-    return {
-        config,
-        urls: {
-            search,
-            searchCount,
-        },
-        assetBasePath,
-    };
-}
