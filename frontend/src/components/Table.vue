@@ -30,6 +30,9 @@
             <template v-slot:item.invoiceNumber="{ item }">
               <a :href="item.link" target="dapi_navigate"> {{ item.invoiceNumber }} </a>
             </template>
+            <template v-slot:item.createTime="{ item }">
+              {{ new Date(item.createTime).toLocaleDateString() }}, {{ new Date(item.createTime).toLocaleTimeString() }}
+            </template>
             <template v-slot:footer.page-text="{ pageStart, pageStop, itemsLength }">
               {{pageStart}} bis {{pageStop}} von {{itemsLength}}
             </template>
@@ -191,6 +194,17 @@ export default {
         },
         { text: 'Versandzeitpunkt', value: 'transportTime' },
         { text: 'Versandrückmeldezeitpunkt', value: 'transportResponseTime' },
+        { text: 'Erstelldatum', value: 'createTime', sort: (a, b) =>  {
+            console.log(new Date(a).valueOf());
+            if(new Date(a).valueOf() < new Date(b).valueOf()) {
+              return -1;
+            } else if(new Date(a).valueOf() > new Date(b).valueOf()) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        },
       ];
     },
   },
@@ -238,6 +252,7 @@ export default {
         processingState: item.displayProperties.find((prop) => prop.name === 'Verarbeitungsstatus').value,
         transportTime: item.displayProperties.find((prop) => prop.name === 'Versandzeitpunkt').value,
         transportResponseTime: item.displayProperties.find((prop) => prop.name === 'Versandrückmeldezeitpunkt').value,
+        createTime: new Date(item.displayProperties.find((prop) => prop.name === 'Erstellt am').value),
       }));
       this.invoices = this.invoices.concat(sortedInvoices);
     },
