@@ -13,7 +13,7 @@ locals {
   stages = {
     "a_prod" = "1"
     "b_dev"  = "$LATEST"
-    "c_qas" = "151"
+    "c_qas" = "168"
     "d_version" = "1"
 }
 

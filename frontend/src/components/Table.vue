@@ -51,11 +51,8 @@
                       hide-details
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="3" class="pb-0">
+                  <v-col cols="4" class="pb-0">
                     <v-select :clearable="true" v-model="orgUnit" :items="orgUnits" label="Organisationseinheit"></v-select>
-                  </v-col>
-                  <v-col cols="1" class="pb-0 d-none" align="center">
-                    <v-icon @click="refreshData()" hidden>mdi-refresh</v-icon>
                   </v-col>
                   <v-col cols="3" class="pt-0">
                     <v-select :clearable="true" v-model="companyCode" :items="companyCodes" label="Buchungskreis ID"></v-select>
@@ -64,13 +61,13 @@
                     <v-select :clearable="true" v-model="processingState" :items="processingStates" label="Verarbeitungsstatus"></v-select>
                   </v-col>
                   <v-col cols="2" class="pt-0">
-                    <v-checkbox v-model="docs01" label="01 - SAP Abrechnung"></v-checkbox>
+                    <v-checkbox v-model="docs01" label="01 - Rechnung"></v-checkbox>
                   </v-col>
                   <v-col cols="2" class="pt-0">
-                    <v-checkbox v-model="docs02" label="02 - Rechnungsanlage"></v-checkbox>
+                    <v-checkbox v-model="docs02" label="02 - Anlage"></v-checkbox>
                   </v-col>
                   <v-col cols="2" class="pt-0">
-                    <v-checkbox v-model="docs08" label="08 - XML Rechnung"></v-checkbox>
+                    <v-checkbox v-model="docs08" label="08 - XML"></v-checkbox>
                   </v-col>
                 </v-row>
               </v-container>
@@ -139,9 +136,16 @@ export default {
     config: {}
   }),
   async mounted() {
-    const data = await this.loadData();
-    this.renderTable(data);
-    this.fillDropdowns();
+    try {
+      const data = await this.loadData();
+      this.renderTable(data);
+      this.fillDropdowns();
+    } catch (err) {
+      this.isLoading = false;
+      this.invoices = [];
+      console.log(err);
+    }
+    
   },
   computed: {
     headers() {
@@ -291,22 +295,13 @@ export default {
         this.isLoading = false;
       }
     },
-    async refreshData() {
-      console.log(1);
-    },
     sendInvoices() {
       this.overlay = true;
       if(Vue.config.devtools) {
         this.overlay = false;
         location.reload();
       } else {
-        const options = {
-          method: 'post',
-          url: '/able-outgoing/invoices',
-          data: { invoices: JSON.stringify(this.selected.map((item) => item.id)) },
-          timeout: 120000,
-        };
-        axios(options)
+        this.sendInvoiceRequests()
           .then(() => { 
             this.overlay = false;
             location.reload();
@@ -317,6 +312,34 @@ export default {
           }
         );
       }
+    },
+    async sendInvoiceRequests() {
+      const promises = [];
+      this.selected.forEach((item) => {
+        promises.push(axios({
+          method: 'put',
+          url: `/dms/r/${this.config.repositoryID}/o2m/${item.id}`,
+          data: {
+            sourceCategory: this.config.invoiceCategory,
+            sourceId: `/dms/r/${this.config.repositoryID}/source`,
+            sourceProperties: {
+                properties: [
+                    {
+                        key: this.config.invoiceStatusPropertyID,
+                        values: ['In Bearbeitung'],
+                    },
+                ],
+            }
+          }
+        }));
+      })
+      await Promise.all(promises);
+      await axios({
+          method: 'post',
+          url: '/able-outgoing/invoices',
+          data: { invoices: JSON.stringify(this.selected.map((item) => item.id)) },
+          timeout: 120000,
+      });
     }
   },
 };

@@ -11,6 +11,7 @@
     "serve": "cd frontend && npx vue-cli-service serve"
   },
   "dependencies": {
+    "@ablegroup/checkgroup": "^1.0.6",
     "@ablegroup/httpoptions": "^1.0.3",
     "@ablegroup/login": "^1.0.0",
     "@ablegroup/propertymapping": "^1.0.6",

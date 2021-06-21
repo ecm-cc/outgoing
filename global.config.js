@@ -11,6 +11,8 @@ function getLocalConfig(tenant) {
         lightsailURL: 'https://ecm-inbound.able-group.de/invoice?stage=dev',
         lightsailUser: process.env.LIGHTSAIL_USER,
         lightsailPass: process.env.LIGHTSAIL_PASS,
+        groupO2CS: '59B48AA5-C4AF-4F31-B2C4-17F21B382611',
+        groupAdmin: '6DB690CB-EA1B-4D45-B00B-63A2E7B21816',
     };
     // QAS
     case '197': return {
@@ -21,6 +23,8 @@ function getLocalConfig(tenant) {
         lightsailURL: 'https://ecm-inbound.able-group.de/invoice?stage=qas',
         lightsailUser: process.env.LIGHTSAIL_USER,
         lightsailPass: process.env.LIGHTSAIL_PASS,
+        groupO2CS: '59B48AA5-C4AF-4F31-B2C4-17F21B382611',
+        groupAdmin: '6DB690CB-EA1B-4D45-B00B-63A2E7B21816',
     };
     // Version
     case '1ha': return {
@@ -31,6 +35,8 @@ function getLocalConfig(tenant) {
         lightsailURL: 'https://ecm-inbound.able-group.de/invoice?stage=version',
         lightsailUser: process.env.LIGHTSAIL_USER,
         lightsailPass: process.env.LIGHTSAIL_PASS,
+        groupO2CS: 'F2F4B53A-301A-46B1-90E0-E4F1386C5165',
+        groupAdmin: '6DB690CB-EA1B-4D45-B00B-63A2E7B21816',
     };
     // Default: PROD
     default: return {
@@ -41,6 +47,8 @@ function getLocalConfig(tenant) {
         lightsailURL: 'https://ecm-inbound.able-group.de/invoice?stage=prod',
         lightsailUser: process.env.LIGHTSAIL_USER,
         lightsailPass: process.env.LIGHTSAIL_PASS,
+        groupO2CS: 'F2F4B53A-301A-46B1-90E0-E4F1386C5165',
+        groupAdmin: '6DB690CB-EA1B-4D45-B00B-63A2E7B21816',
     };
     }
 }
